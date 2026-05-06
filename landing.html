@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ParkSmart - Book Parking Space Easily</title>
+    <style>
+        :root {
+            --primary-blue: #00f2ff;
+            --dark-blue: #0a1929;
+            --white: #ffffff;
+            --gray: #cbd5e0;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #f7fafc;
+            color: #333;
+        }
+
+        /* Hero Section - Igice cyo hejuru */
+        .hero {
+            height: 90vh;
+            background: linear-gradient(rgba(10, 25, 41, 0.8), rgba(10, 25, 41, 0.8)), 
+                        url('https://images.unsplash.com/photo-1573348722427-f1d6819fdf98?auto=format&fit=crop&q=80&w=2000');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .hero-content span {
+            color: var(--primary-blue);
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: var(--gray);
+        }
+
+        .site-header { text-align: center; padding: 24px 0 0; }
+        .site-header img { width: 120px; max-width: 100%; }
+
+        .cta-button {
+            background-color: var(--primary-blue);
+            color: #000;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: 0.3s;
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.5);
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            background-color: #fff;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 80px 20px;
+            text-align: center;
+            background: #fff;
+        }
+
+        .features h2 {
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            padding: 30px;
+            background: #f8fafc;
+            border-radius: 20px;
+            transition: 0.3s;
+            border: 1px solid #e2e8f0;
+        }
+
+        .menu-section {
+            padding: 60px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+        }
+
+        .menu-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 24px 44px rgba(0,0,0,0.14);
+        }
+
+        .menu-card h3 {
+            margin-bottom: 18px;
+            font-size: 1.5rem;
+            color: #fff;
+        }
+
+        .menu-card a {
+            display: inline-block;
+            margin-top: 14px;
+            padding: 14px 28px;
+            border-radius: 999px;
+            background: #00f2ff;
+            color: #000;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .menu-card a:hover {
+            background: #ffffff;
+        }
+
+        .feature-card:hover {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-color: var(--primary-blue);
+        }
+
+        .icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        /* Promo Section */
+        .promo {
+            background: var(--dark-blue);
+            color: white;
+            padding: 60px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .promo-text {
+            max-width: 500px;
+        }
+
+        .promo-image img {
+            width: 100%;
+            max-width: 450px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,242,255,0.2);
+        }
+
+        /* Footer */
+        footer {
+            background: #050f1a;
+            color: #666;
+            padding: 40px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .hero-content h1 { font-size: 2.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div style="padding:16px; text-align:left; background: rgba(255,255,255,0.05);">
+        <a href="home.html" style="color:#38bdf8; text-decoration:none; font-weight:bold;">← Home</a>
+    </div>
+
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Park in an <span>Advanced</span> Way</h1>
+            <p>Avoid searching for space for a long time. Find space, pay in seconds.</p>
+            <a href="#" class="cta-button">START PARKING TODAY</a>
+        </div>
+    </header>
+
+    <section class="features">
+        <h2>Why choose us?</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="icon">📱</div>
+                <h3>Quick Payment</h3>
+                <p>Use MTN MoMo or Airtel Money without queuing at machines.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🛡️</div>
+                <h3>Full Security</h3>
+                <p>Your car is protected by technology system and professional guards.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🕒</div>
+                <h3>Monitor Time</h3>
+                <p>Receive SMS when your parking time is about to expire.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="menu-section">
+        <div class="menu-card" style="background: linear-gradient(135deg, #047481, #00f2ff);">
+            <h3>Settings</h3>
+            <p>Change your password and manage user information.</p>
+            <a href="settings.html">Go to Settings</a>
+        </div>
+        <div class="menu-card" style="background: linear-gradient(135deg, #0f172a, #475569);">
+            <h3>History</h3>
+            <p>Check your activities and services used.</p>
+            <a href="history.html">Go to History</a>
+        </div>
+    </section>
+
+    <section class="promo">
+        <div class="promo-text">
+            <h2 style="color: var(--primary-blue);">Get Reward on Your Journey</h2>
+            <p>Car Park Management System helps you find parking easily without circling the city.</p>
+            <p>✅ Permanent Space<br>✅ Affordable Prices for Everyone<br>✅ 100% Proven System</p>
+        </div>
+        <div class="promo-image">
+            <img src="https://images.unsplash.com/photo-1590674899484-13da0d1b58f5?auto=format&fit=crop&q=80&w=1000" alt="Smart Parking">
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Car Park Pro Rwanda. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>

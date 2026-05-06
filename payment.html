@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payment Parking System</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: Arial, sans-serif;        
+}
+
+body{
+  background:#1f4aa8;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+
+.container{
+  width:900px;
+  background:#2b5bbb;
+  padding:20px;
+  border-radius:10px;
+  color:white;
+}
+
+.title{
+  text-align:center;
+  font-size:28px;
+  margin-bottom:20px;
+}
+
+.content{
+  display:flex;
+  justify-content:space-between;
+}
+
+.left, .right{
+  width:48%;
+}
+
+.section-title{
+  font-size:20px;
+  margin-bottom:15px;
+}
+
+select, input{
+  width:100%;
+  padding:10px;
+  margin-top:10px;
+  border:none;
+  border-radius:5px;
+  outline:none;
+}
+
+.method input[type="radio"]{
+  display:none;
+}
+
+.method{
+  background:#143d8f;
+  padding:14px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  transition:0.3s;
+  display:flex;
+  align-items:center;
+}
+
+.method:hover{
+  background:#0f2f70;
+}
+
+.site-header { text-align:center; margin-bottom:18px; }
+.site-header img { width:120px; max-width:100%; }
+
+.method.active{
+  background:#0a2c72;
+}
+
+.method-input input{
+  width:100%;
+  padding:10px;
+  margin-top:10px;
+  border:none;
+  border-radius:5px;
+  outline:none;
+}
+
+.info{
+  margin-top:20px;
+  line-height:2;
+}
+
+.info span{
+  float:right;
+}
+
+.payments{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-top:10px;
+}
+
+.pay-btn{
+  margin-top:20px;
+  background:green;
+  color:white;
+  padding:12px;
+  border:none;
+  width:100%;
+  border-radius:5px;
+  font-size:16px;
+  cursor:pointer;
+}
+
+.pay-btn:hover{
+  background:darkgreen;
+}
+
+.total{
+  margin-top:15px;
+  font-size:18px;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="site-header"><img src="logo.png" alt="Car Park Logo"></div>
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+    <a href="home.html" style="color:white; text-decoration:none; background:rgba(255,255,255,0.12); padding:10px 16px; border-radius:6px;">← Home</a>
+    <div class="title">Payment</div>
+    <span></span>
+  </div>
+
+  <div class="content">
+
+    <!-- LEFT SIDE -->
+    <div class="left">
+      <div class="section-title">Extend Parking Time</div>
+
+      <select id="time">
+        <option value="" selected disabled>Choose time</option>
+        <option value="1">1 hour</option>
+        <option value="2">2 hours</option>
+        <option value="3">3 hours</option>
+        <option value="4">4 hours</option>
+        <option value="5">5 hours</option>
+        <option value="6">6 hours</option>
+        <option value="7">7 hours</option>
+        <option value="8">8 hours</option>
+        <option value="9">9 hours</option>
+        <option value="10">10 hours</option>
+        <option value="11">11 hours</option>
+        <option value="12">12 hours</option>
+        <option value="13">13 hours</option>
+        <option value="14">14 hours</option>
+        <option value="15">15 hours</option>
+        <option value="16">16 hours</option>
+        <option value="17">17 hours</option>
+        <option value="18">18 hours</option>
+        <option value="19">19 hours</option>
+        <option value="20">20 hours</option>
+        <option value="21">21 hours</option>
+        <option value="22">22 hours</option>
+        <option value="23">23 hours</option>
+        <option value="24">24 hours</option>
+        <option value="48">2 days</option>
+        <option value="72">3 days</option>
+      </select>
+
+      <div class="info">
+        Base (1 hour) <span>Frw 500</span><br>
+        Additional (1 hour) <span>Frw 500</span>
+      </div>
+
+      <div class="total">
+        Total: <span id="total">Frw 0</span>
+      </div>
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="right">
+      <div class="section-title">Payment Method</div>
+
+      <div class="payments" id="method-list">
+        <label class="method">
+          <input type="radio" name="payment-method" value="momo">
+          MTN MOMO
+        </label>
+        <label class="method">
+          <input type="radio" name="payment-method" value="airtel">
+          Airtel Money
+        </label>
+        <label class="method">
+          <input type="radio" name="payment-method" value="card">
+          Visa/Mastercard
+        </label>
+        <label class="method">
+          <input type="radio" name="payment-method" value="scan">
+          Scan to pay
+        </label>
+      </div>
+
+      <div id="payment-details" style="margin-top:16px; display:none;">
+        <div class="method-input" id="momo-input" style="display:none;">
+          <input id="momo-phone" type="tel" placeholder="Enter MTN MOMO phone number">
+        </div>
+        <div class="method-input" id="airtel-input" style="display:none;">
+          <input id="airtel-phone" type="tel" placeholder="Enter Airtel Money phone number">
+        </div>
+        <div class="method-input" id="card-input" style="display:none;">
+          <input id="card-number" type="text" placeholder="Card number">
+          <input id="card-expiry" type="text" placeholder="MM/YY" style="margin-top:10px;">
+          <input id="card-cvc" type="text" placeholder="CVC" style="margin-top:10px;">
+        </div>
+        <div class="method-input" id="scan-input" style="display:none;">
+          <p style="margin:0; color:#dbeafe;">Scan the QR code with your mobile banking app, then press PAY.</p>
+        </div>
+      </div>
+
+      <button class="pay-btn" id="pay-button">PAY NOW</button>
+      <p id="payment-message" style="margin-top:16px; color:#a7f3d0; display:none;"></p>
+    </div>
+  </div>
+</div>
+
+<script>
+const STORAGE_SLOT_KEY = 'selectedCarSlot';
+const CURRENT_USER_KEY = 'currentUser';
+const TRANSACTIONS_KEY = 'parkingTransactions';   // ← Important: Same as Admin
+
+const timeSelect = document.getElementById("time");
+const totalDisplay = document.getElementById("total");
+const paymentMethods = document.querySelectorAll('input[name="payment-method"]');
+const paymentDetails = document.getElementById('payment-details');
+const payButton = document.getElementById('pay-button');
+const paymentMessage = document.getElementById('payment-message');
+
+// Get current user & slot
+function getCurrentUser() {
+  return JSON.parse(localStorage.getItem(CURRENT_USER_KEY) || 'null');
+}
+
+function getSelectedSlot() {
+  return localStorage.getItem(STORAGE_SLOT_KEY);
+}
+
+// Save Transaction (ihuje n'Admin Dashboard)
+function addTransaction(plate, slot, amount, hours) {
+  let txs = JSON.parse(localStorage.getItem(TRANSACTIONS_KEY) || '[]');
+  
+  const newTx = {
+    id: Date.now(),
+    date: new Date().toLocaleString('en-GB'),
+    plate: plate.toUpperCase(),
+    slot: slot,
+    amount: parseInt(amount),
+    hours: parseInt(hours),
+    timestamp: Date.now()
+  };
+  
+  txs.unshift(newTx); // Latest first
+  localStorage.setItem(TRANSACTIONS_KEY, JSON.stringify(txs));
+}
+
+// Calculate Total
+function updateTotal() {
+  let hours = parseInt(timeSelect.value);
+  let price = isNaN(hours) ? 0 : hours * 500;
+  totalDisplay.innerText = `Frw ${price}`;
+}
+
+timeSelect.addEventListener("change", updateTotal);
+
+// Payment Method Selection
+paymentMethods.forEach(method => {
+  method.addEventListener('change', function() {
+    document.querySelectorAll('.method').forEach(item => item.classList.remove('active'));
+    this.closest('.method').classList.add('active');
+
+    paymentDetails.style.display = 'block';
+    document.querySelectorAll('.method-input').forEach(block => block.style.display = 'none');
+    document.getElementById(this.value + '-input').style.display = 'block';
+  });
+});
+
+// Validation & Payment
+payButton.addEventListener('click', function() {
+  const hours = timeSelect.value;
+  if (!hours) {
+    alert('Please choose the time you want to extend.');
+    return;
+  }
+
+  const slot = getSelectedSlot();
+  const user = getCurrentUser();
+
+  if (!slot) {
+    alert('No slot selected. Go back and choose a slot.');
+    return;
+  }
+  if (!user) {
+    alert('Please login first.');
+    return;
+  }
+
+  const selectedMethod = document.querySelector('input[name="payment-method"]:checked');
+  if (!selectedMethod) {
+    alert('Please choose a payment method.');
+    return;
+  }
+
+  const amount = parseInt(hours) * 500;
+
+  // Record Transaction
+  addTransaction(user.plate || user.username, slot, amount, hours);
+
+  // Success Message
+  paymentMessage.style.display = 'block';
+  paymentMessage.innerText = `✅ Payment Successful! ${amount.toLocaleString()} RWF paid for ${hours} hours.`;
+
+  // Update user slot info
+  let userSlots = JSON.parse(localStorage.getItem('userSlots') || '{}');
+  const plate = (user.plate || '').toUpperCase();
+  
+  userSlots[plate] = {
+    slot: slot,
+    time: new Date().toLocaleString(),
+    hours: hours,
+    amount: amount,
+    paidAt: new Date().toISOString()
+  };
+  localStorage.setItem('userSlots', JSON.stringify(userSlots));
+
+  // Redirect after success
+  setTimeout(() => {
+    window.location.href = 'home.html';
+  }, 1500);
+});
+
+// Initialize
+function initPaymentPage() {
+  const slot = getSelectedSlot();
+  if (slot) {
+    const slotInfo = document.createElement('p');
+    slotInfo.style.color = '#dbeafe';
+    slotInfo.style.margin = '10px 0';
+    slotInfo.innerHTML = `<strong>Selected Slot:</strong> ${slot}`;
+    document.querySelector('.left').appendChild(slotInfo);
+  }
+  updateTotal();
+}
+
+initPaymentPage();
+</script>
+
+</body>
+</html>

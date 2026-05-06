@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Settings</title>
+    <style>
+        body { margin: 0; font-family: Arial, sans-serif; background: #07111d; color: #e2e8f0; }
+        .site-header { text-align: center; padding: 24px 0 0; }
+        .site-header img { width: 120px; max-width: 100%; }
+        .page { max-width: 640px; margin: 40px auto; padding: 32px; background: rgba(15,23,42,0.98); border-radius: 24px; box-shadow: 0 25px 80px rgba(0,0,0,.55); }
+        .page h1 { margin-top: 0; font-size: 2.4rem; color: #ffffff; }
+        .page p { color: #cbd5e1; line-height: 1.7; margin-bottom: 28px; }
+        .field { margin-bottom: 18px; }
+        .field input { width: 100%; padding: 16px 18px; border-radius: 18px; border: 1px solid #334155; background: #111827; color: #f8fafc; font-size: 1rem; }
+        .field input::placeholder { color: #94a3b8; }
+        .hint { color: #cbd5e1; font-size: 0.95rem; margin-bottom: 28px; line-height: 1.6; }
+        .forgot-row { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 14px; align-items: center; margin-bottom: 22px; }
+        .forgot-link { color: #60a5fa; text-decoration: none; font-size: 0.95rem; }
+        .logout-row { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 26px; }
+        .logout-row input { margin-top: 4px; accent-color: #38bdf8; }
+        .logout-row label { color: #cbd5e1; line-height: 1.5; font-size: 0.95rem; cursor: pointer; }
+        .btn { background: linear-gradient(90deg, #60a5fa, #38bdf8); color: #07111d; border: none; border-radius: 18px; padding: 16px 24px; cursor: pointer; font-weight: bold; width: 100%; font-size: 1rem; }
+        .btn:hover { opacity: 0.95; }
+        .message { margin-top: 18px; color: #86efac; font-weight: 600; }
+        .top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .top-row a { color: #38bdf8; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="site-header"><img src="logo.png" alt="Car Park Logo"></div>
+<div class="page">
+    <div class="top-row">
+        <a href="home.html">← Home</a>
+        <span>Change password</span>
+    </div>
+    <h1>Change password</h1>
+    <p class="hint">Your password must be at least 6 characters and should include a combination of numbers, letters and special characters (!@$%).</p>
+
+    <div class="field">
+        <input type="password" id="current-pass" placeholder="Current password (Updated 3/13/2026)">
+    </div>
+    <div class="field">
+        <input type="password" id="new-pass" placeholder="New password">
+    </div>
+    <div class="field">
+        <input type="password" id="confirm-pass" placeholder="Re-type new password">
+    </div>
+
+    <div class="forgot-row">
+        <a class="forgot-link" href="register.html">Forgot your password?</a>
+    </div>
+
+    <div class="logout-row">
+        <input type="checkbox" id="logout-other">
+        <label for="logout-other">Log out of other devices. Choose this if someone else used your account.</label>
+    </div>
+
+    <button class="btn" onclick="savePassword()">Change password</button>
+
+    <div id="settings-message" class="message"></div>
+</div>
+
+<script>
+    const defaultUserPass = 'user123';
+    if (!localStorage.getItem('userPass')) {
+        localStorage.setItem('userPass', defaultUserPass);
+    }
+
+    function savePassword() {
+        const current = document.getElementById('current-pass').value;
+        const next = document.getElementById('new-pass').value;
+        const confirm = document.getElementById('confirm-pass').value;
+        const message = document.getElementById('settings-message');
+
+        if (!current || !next || !confirm) {
+            message.textContent = 'Wuzuza aho hose mbere yo kubika.';
+            message.style.color = '#fca5a5';
+            return;
+        }
+
+        if (current !== localStorage.getItem('userPass')) {
+            message.textContent = 'Password ya none ntabwo ari yo.';
+            message.style.color = '#f87171';
+            return;
+        }
+
+        if (next !== confirm) {
+            message.textContent = 'Password nshya zitarahuye.';
+            message.style.color = '#f87171';
+            return;
+        }
+
+        localStorage.setItem('userPass', next);
+        message.textContent = 'Password yahinduwe neza!';
+        message.style.color = '#86efac';
+        resetForm();
+    }
+
+    function resetForm() {
+        document.getElementById('current-pass').value = '';
+        document.getElementById('new-pass').value = '';
+        document.getElementById('confirm-pass').value = '';
+    }
+</script>
+
+</body>
+</html>
