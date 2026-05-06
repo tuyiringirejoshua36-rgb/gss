@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us - KICUKIRO Car Park</title>
+
+<style>
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: white;
+    background-color: #050f1a;
+}
+
+/* Background */
+.about-section {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 80px 0 60px 0;
+    background: linear-gradient(rgba(0,0,0,0.75), rgba(5,15,26,0.85)), 
+                url("https://images.unsplash.com/photo-1502877338535-766e1452684a") no-repeat center/cover;
+}
+
+.container {
+    position: relative;
+    z-index: 2;
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* Header */
+.site-header {
+    text-align: center;
+    padding: 20px;
+    background: #000;
+}
+
+.site-header img {
+    width: 130px;
+}
+
+/* Content */
+h1 {
+    font-size: 3.8rem;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.intro-text {
+    font-size: 1.25rem;
+    line-height: 1.7;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 60px auto;
+    color: #ddd;
+}
+
+/* Cards */
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.card {
+    background: rgba(10, 25, 41, 0.95);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.4s;
+}
+
+.card:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 15px 30px rgba(0, 242, 255, 0.15);
+}
+
+.card img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 25px;
+}
+
+.card-content h3 {
+    color: #00f2ff;
+    font-size: 1.5rem;
+    margin: 0 0 15px 0;
+}
+
+.card-content p {
+    color: #ccc;
+    line-height: 1.7;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 25px;
+    background: #081222;
+    color: #aaa;
+    font-size: 0.9rem;
+}
+</style>
+</head>
+
+<body>
+
+<div style="padding:16px; text-align:left; background: rgba(255,255,255,0.05);">
+    <a href="home.html" style="color:#38bdf8; text-decoration:none; font-weight:bold;">← Home</a>
+</div>
+
+<div class="site-header">
+    <img src="logo.png" alt="KICUKIRO Car Park Logo">
+</div>
+
+<section class="about-section">
+    <div class="container">
+
+        <h1>About KICUKIRO Car Park</h1>
+        
+        <p class="intro-text">
+            We are a modern, smart parking management system located in Kicukiro, Kigali. 
+            Our goal is to make parking stress-free, secure, and efficient for every driver.
+        </p>
+
+        <!-- Promotional Cards -->
+        <div class="cards-container">
+
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1583121274602-3e2820c69888" alt="Smart Parking">
+                <div class="card-content">
+                    <h3>🚀 Our Mission</h3>
+                    <p>To revolutionize parking in Kigali by providing a seamless, technology-driven experience that saves time and ensures maximum security for vehicles.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1494905998402-395d579af36f" alt="Technology">
+                <div class="card-content">
+                    <h3>💡 Our Vision</h3>
+                    <p>To become the leading smart parking solution in Rwanda, offering real-time availability, cashless payments, and excellent customer service.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70" alt="Security">
+                <div class="card-content">
+                    <h3>🛡️ Why Choose Us?</h3>
+                    <p>24/7 CCTV surveillance, automatic number plate recognition, easy online booking, and friendly support team ready to assist you anytime.</p>
+                </div>
+            </div>
+
+            <!-- Free Window Cleaning Service -->
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1622445275576-721325763afe" alt="Rwandan worker cleaning car">
+                <div class="card-content">
+                    <h3>🧼 Free Window Cleaning</h3>
+                    <p>If your car is dirty, we clean the windows for free! Our professional team provides excellent cleaning service while you park with us.</p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+<footer>
+    📍 Kicukiro, Kigali - Rwanda | 
+    📞 +250 788 123 456 | 
+    ✉️ info@kicukirocarpark.com <br>
+    © 2026 KICUKIRO Car Park System. All Rights Reserved.
+</footer>
+
+</body>
+</html>
