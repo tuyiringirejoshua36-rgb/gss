@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User History</title>
+    <style>
+        body { margin: 0; font-family: Arial, sans-serif; background: #07111d; color: #e2e8f0; }
+        .site-header { text-align: center; padding: 24px 0 0; }
+        .site-header img { width: 120px; max-width: 100%; }
+        .page { max-width: 900px; margin: 40px auto; padding: 24px; background: #0f172a; border-radius: 24px; box-shadow: 0 30px 80px rgba(0,0,0,.45); }
+        .top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .top-row a { color: #38bdf8; text-decoration: none; font-weight: bold; }
+        h1 { margin-top: 0; font-size: 2rem; color: #00f2ff; }
+        .history-list { list-style: none; padding: 0; margin: 0; }
+        .history-item { padding: 18px 20px; margin-bottom: 16px; border-radius: 16px; background: #111827; border: 1px solid rgba(148,163,184,.12); }
+        .history-item span { display: block; color: #94a3b8; margin-top: 8px; }
+        .empty { padding: 24px; text-align: center; color: #94a3b8; }
+    </style>
+</head>
+<body>
+
+<div class="page">
+    <div class="site-header"><img src="logo.png" alt="Car Park Logo"></div>
+    <div class="top-row">
+        <a href="home.html">← Home</a>
+        <span>History</span>
+    </div>
+
+    <h1>Account History</h1>
+    <p>Check your activities in the parking system.</p>
+
+    <ul id="history-list" class="history-list"></ul>
+    <div id="history-empty" class="empty">No history found. Start using the service and you will see information here.</div>
+</div>
+
+<script>
+    const defaultHistory = [
+        { title: 'Started using account', date: '2026-04-30', details: 'Registered in the system.' },
+        { title: 'Approved parking space', date: '2026-04-30', details: 'Selected parking space.' },
+        { title: 'Paid for parking', date: '2026-04-30', details: 'Paid Frw 500 via MTN MoMo.' }
+    ];
+
+    function loadHistory() {
+        const list = document.getElementById('history-list');
+        const empty = document.getElementById('history-empty');
+        const stored = JSON.parse(localStorage.getItem('userHistory') || 'null');
+        const history = stored || defaultHistory;
+
+        if (!history.length) {
+            empty.style.display = 'block';
+            return;
+        }
+
+        empty.style.display = 'none';
+        history.forEach(item => {
+            const li = document.createElement('li');
+            li.className = 'history-item';
+            li.innerHTML = `<strong>${item.title}</strong><span>${item.date} · ${item.details}</span>`;
+            list.appendChild(li);
+        });
+    }
+
+    loadHistory();
+</script>
+
+</body>
+</html>
