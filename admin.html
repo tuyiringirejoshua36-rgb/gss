@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - KICUKIRO Car Park</title>
+    <style>
+        body { margin: 0; font-family: sans-serif; background: #0f172a; color: #e2e8f0; }
+        .login-page, .dashboard-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .login-card { background: rgba(15, 23, 42, 0.95); padding: 40px; border-radius: 16px; box-shadow: 0 20px 60px rgba(15,23,42,.5); width: 360px; }
+        .login-card h2 { margin-top: 0; color: #fff; }
+        .login-card input { width: 100%; padding: 12px 14px; margin: 12px 0; border-radius: 10px; border: 1px solid #334155; background: #0f172a; color: #fff; }
+        .login-card .button-row { display: flex; justify-content: space-between; gap: 10px; }
+        .login-card .button-row button { width: calc(50% - 5px); padding: 12px; margin: 12px 0 0; border: none; border-radius: 10px; background: #089934; color: white; font-weight: bold; cursor: pointer; }
+        .login-card .button-row button.secondary { background: #7bcf82; }
+        .hidden { display: none; }
+        .dashboard { display: flex; min-height: 100vh; }
+        .sidebar { width: 280px; background: #111827; padding: 30px 20px; box-shadow: 4px 0 30px rgba(0,0,0,.25); }
+        .sidebar h2 { margin-top: 0; color: #fff; }
+        .site-logo img { width: 100px; display: block; margin-bottom: 18px; }
+        .nav { list-style: none; padding: 0; margin: 24px 0 0; }
+        .nav li { margin-bottom: 12px; }
+        .nav button { width: 100%; text-align: left; background: transparent; border: none; color: #cbd5e1; padding: 14px 16px; border-radius: 12px; cursor: pointer; font-size: 0.95rem; }
+        .nav button.active, .nav button:hover { background: #1d4ed8; color: #fff; }
+        .content { flex: 1; padding: 32px 40px; }
+        .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+        .topbar h1 { margin: 0; font-size: 1.8rem; }
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 32px; }
+        .card { background: #1f2937; border-radius: 18px; padding: 24px; box-shadow: inset 0 0 0 1px rgba(148,163,184,.12); }
+        .card h3 { margin: 0 0 12px; color: #fff; }
+        .card p { margin: 0; color: #94a3b8; }
+        .section { background: #111827; border-radius: 20px; padding: 28px; }
+        .section h2 { margin-top: 0; color: #fff; }
+        .form-group { display: grid; gap: 12px; margin: 16px 0 24px; }
+        .form-group label { font-size: 0.95rem; color: #cbd5e1; }
+        .form-group input { width: 100%; padding: 14px 16px; border-radius: 12px; border: 1px solid #334155; background: #0f172a; color: #fff; }
+        .form-group button { width: fit-content; padding: 12px 22px; border-radius: 12px; border: none; background: #22c55e; color: #0f172a; font-weight: bold; cursor: pointer; }
+        .logout-button { background: #ef4444; color: white; padding: 12px 18px; border-radius: 12px; border: none; cursor: pointer; }
+        .user-table-wrapper { overflow-x: auto; margin-top: 18px; }
+        .user-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+        .user-table th, .user-table td { padding: 14px 12px; text-align: left; border-bottom: 1px solid #334155; color: #e2e8f0; }
+        .user-table th { background: #1f2937; color: #fff; font-weight: 600; }
+        .user-table tr:hover { background: rgba(255,255,255,0.04); }
+        .no-users { color: #94a3b8; margin-top: 12px; }
+        .btn-delete { background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
+        .btn-delete:hover { background: #dc2626; }
+    </style>
+</head>
+<body>
+
+<div id="login-section" class="login-page">
+    <div class="login-card">
+        <h2>Admin Login</h2>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <div class="button-row">
+            <button onclick="login()">Login</button>
+            <button class="secondary" onclick="alert('Cancelled')">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<div id="dashboard-section" class="hidden">
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="site-logo"><img src="logo.png" alt="Car Park Logo"></div>
+            <h2>Admin Dashboard</h2>
+            <p>Welcome: <strong id="admin-name">Admin</strong></p>
+            <ul class="nav">
+                <li><button id="menu-overview" class="active" onclick="showSection('overview')">Overview</button></li>
+                <li><button id="menu-activity" onclick="showSection('activity')">Activity</button></li>
+                <li><button id="menu-users" onclick="showSection('users')">Users</button></li>
+                <li><button id="menu-settings" onclick="showSection('settings')">Settings</button></li>
+            </ul>
+            <button class="logout-button" onclick="logout()">Logout</button>
+        </aside>
+
+        <main class="content">
+            <div class="topbar">
+                <div>
+                    <h1>Welcome, Admin</h1>
+                    <p>Check what happened on the website and the management of your account.</p>
+                </div>
+            </div>
+
+            <!-- OVERVIEW SECTION -->
+            <section id="overview" class="section">
+                <h2>Overview</h2>
+                <div class="card-grid">
+                    <div class="card">
+                        <h3>Users</h3>
+                        <p id="user-count">0 users who have used the website.</p>
+                    </div>
+                    <div class="card" style="padding: 20px;">
+                        <h3>Car Slots Status</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0;">
+                            <div style="background:#166534; padding:18px; border-radius:12px; text-align:center;">
+                                <p style="color:#4ade80; margin:0; font-size:0.95rem;">Available</p>
+                                <p id="available-slots" style="font-size:2.8rem; font-weight:bold; margin:8px 0 4px;">100</p>
+                                <p style="color:#86efac; margin:0; font-size:0.9rem;">Slots zisigaye</p>
+                            </div>
+                            
+                        </div>
+                        <p id="total-slots" style="text-align:center; font-weight:500;">Total: 100 slots</p>
+                    </div>
+                    <div class="card">
+                        <h3>Information</h3>
+                        <p id="info-text">Parking activities approved by admin.</p>
+                    </div>
+                </div>
+
+                <h2 style="margin: 40px 0 15px;">All Parking Slots Management</h2>
+                <div class="user-table-wrapper">
+                    <table class="user-table" id="slots-table">
+                        <thead>
+                            <tr>
+                            
+                            </tr>
+                        </thead>
+                        <tbody id="slots-body"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- USERS SECTION (Updated with Current Slot) -->
+            <section id="users" class="section hidden">
+                <h2>Users & Current Parking</h2>
+                <p>Check users and their assigned parking slots.</p>
+                <div class="user-table-wrapper">
+                    <table class="user-table">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Telephone</th>
+                                <th>Plate</th>
+                                <th>Car Type</th>
+                                <th>Current Slot</th>
+                                <th>Registered</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-body"></tbody>
+                    </table>
+                    <p id="no-users-message" class="no-users hidden">No users currently.</p>
+                </div>
+            </section>
+
+            <section id="activity" class="section hidden">
+                <h2>Recent Activity</h2>
+                <div class="card-grid">
+                    <div class="card"><h3>Last Action</h3><p>Admin logged into the system.</p></div>
+                    <div class="card"><h3>Spaces Changed</h3><p>Parking slots have been assigned.</p></div>
+                    <div class="card"><h3>Other Activities</h3><p>System management activities.</p></div>
+                </div>
+            </section>
+            
+            <section id="settings" class="section hidden">
+                <h2>Settings</h2>
+                <p>Change admin password here.</p>
+                <div class="form-group">
+                    <label for="new-password">New Password</label>
+                    <input type="password" id="new-password" placeholder="Enter new password">
+                </div>
+                <div class="form-group">
+                    <button onclick="changePassword()">Save Changes</button>
+                </div>
+                <p id="settings-message" style="color:#a3e635;"></p>
+            </section>
+        </main>
+    </div>
+</div>
+
+<script>
+    const defaultAdminPass = '1234';
+    if (!localStorage.getItem('adminPass')) {
+        localStorage.setItem('adminPass', defaultAdminPass);
+    }
+
+    function login() {
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value;
+        if (!username) { alert('Enter username before logging in.'); return; }
+        if (!password) { alert('Enter admin password.'); return; }
+        if (password !== localStorage.getItem('adminPass')) { alert('Password is not correct.'); return; }
+
+        document.getElementById('login-section').classList.add('hidden');
+        document.getElementById('dashboard-section').classList.remove('hidden');
+        document.getElementById('admin-name').innerText = username;
+        showSection('overview');
+    }
+
+    function showSection(sectionId) {
+        const sections = ['overview', 'activity', 'users', 'settings'];
+        sections.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.classList.toggle('hidden', id !== sectionId);
+        });
+
+        document.querySelectorAll('.nav button').forEach(button => {
+            button.classList.toggle('active', button.id === 'menu-' + sectionId);
+        });
+
+        if (sectionId === 'users') renderUsers();
+        if (sectionId === 'overview') {
+            updateOverviewCount();
+            updateCarSlots();
+            renderAllSlots();
+        }
+    }
+
+    // Users Management
+    function getUsers() { return JSON.parse(localStorage.getItem('carParkUsers') || '[]'); }
+    function saveUsers(users) { localStorage.setItem('carParkUsers', JSON.stringify(users)); }
+
+    function renderUsers() {
+        const users = getUsers();
+        const userSlots = JSON.parse(localStorage.getItem('userSlots') || '{}');
+        const tbody = document.getElementById('users-body');
+        const noUsersMessage = document.getElementById('no-users-message');
+        tbody.innerHTML = '';
+
+        if (!users.length) {
+            noUsersMessage.classList.remove('hidden');
+            return;
+        }
+
+        noUsersMessage.classList.add('hidden');
+
+        users.forEach((user, index) => {
+            const plate = (user.plate || '').toUpperCase();
+            const slotInfo = userSlots[plate];
+            const currentSlot = slotInfo ? 
+                `<span style="color:#4ade80; font-weight:bold;">${slotInfo.slot}</span><br><small>${slotInfo.time}</small>` : 
+                '<span style="color:#64748b;">No slot</span>';
+
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${user.username || '-'}</td>
+                <td>${user.email || '-'}</td>
+                <td>${user.phone || '-'}</td>
+                <td>${user.plate || '-'}</td>
+                <td>${user.cartype || '-'}</td>
+                <td>${currentSlot}</td>
+                <td>${new Date(user.registeredAt || Date.now()).toLocaleString()}</td>
+                <td><button class="btn-delete" onclick="deleteUser(${index})">Delete</button></td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+    function deleteUser(index) {
+        if (confirm("Are you sure you want to delete this user?")) {
+            let users = getUsers();
+            users.splice(index, 1);
+            saveUsers(users);
+            renderUsers();
+            updateOverviewCount();
+        }
+    }
+
+    function updateOverviewCount() {
+        const users = getUsers();
+        document.getElementById('user-count').innerText = `${users.length} users who have used the website.`;
+    }
+
+    // Car Slots Management
+    function updateCarSlots() {
+        const occupied = JSON.parse(localStorage.getItem('occupiedSlots') || '[]');
+        const total = 100;
+        const occupiedCount = occupied.length;
+        const availableCount = total - occupiedCount;
+
+        document.getElementById('occupied-slots').innerText = occupiedCount;
+        document.getElementById('available-slots').innerText = availableCount;
+        document.getElementById('total-slots').innerText = `Total: ${total} slots (${occupiedCount} occupied)`;
+    }
+
+    function renderAllSlots() {
+        const occupied = JSON.parse(localStorage.getItem('occupiedSlots') || '[]');
+        const tbody = document.getElementById('slots-body');
+        tbody.innerHTML = '';
+
+        for (let i = 1; i <= 100; i++) {
+            const slotCode = 'A' + i.toString().padStart(3, '0');
+            const isOccupied = occupied.includes(slotCode);
+
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><strong>${slotCode}</strong></td>
+                <td>
+                    <span style="color: ${isOccupied ? '#f87171' : '#4ade80'}; font-weight:bold;">
+                        ${isOccupied ? 'Occupied' : 'Available'}
+                    </span>
+                </td>
+                <td>
+                    ${isOccupied ? 
+                        `<button class="btn-delete" onclick="freeSlot('${slotCode}')">Free Slot</button>` : 
+                        '<span style="color:#64748b;">—</span>'}
+                </td>
+            `;
+            tbody.appendChild(row);
+        }
+    }
+
+    function freeSlot(slotCode) {
+        if (confirm(`Release slot ${slotCode}?`)) {
+            let occupied = JSON.parse(localStorage.getItem('occupiedSlots') || '[]');
+            occupied = occupied.filter(s => s !== slotCode);
+            localStorage.setItem('occupiedSlots', JSON.stringify(occupied));
+            updateCarSlots();
+            renderAllSlots();
+        }
+    }
+
+    function changePassword() {
+        const newPassword = document.getElementById('new-password').value;
+        const message = document.getElementById('settings-message');
+        if (!newPassword) { alert('Enter new password before saving.'); return; }
+        localStorage.setItem('adminPass', newPassword);
+        message.innerText = 'Password changed successfully!';
+        document.getElementById('new-password').value = '';
+    }
+
+    function logout() { location.reload(); }
+
+    // Initial load
+    window.onload = () => {
+        if (!document.getElementById('dashboard-section').classList.contains('hidden')) {
+            updateCarSlots();
+            renderAllSlots();
+        }
+    };
+</script>
+</body>
+</html>
