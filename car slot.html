@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Slot Selection - KICUKIRO Car Park</title>
+    <style>
+        body { 
+            background-color: #0d0d0d; 
+            color: white; 
+            font-family: 'Segoe UI', sans-serif; 
+            padding: 20px; 
+            margin: 0;
+        }
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            max-width: 900px;
+            margin: 0 auto 20px auto;
+        }
+        .header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 20px;
+            max-width: 900px;
+            margin: 0 auto 20px auto;
+        }
+        .slot-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 10px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .slot {
+            padding: 15px 5px;
+            text-align: center;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: bold;
+            border: none;
+            transition: all 0.3s;
+        }
+        /* Icyatsi: Irimo ubusa */
+        .available { 
+            background-color: #28a745; 
+            color: white; 
+        }
+        /* Umutuku: Yafashwe */
+        .occupied { 
+            background-color: #dc3545; 
+            color: white; 
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+        /* Ubururu: Iyo ukanzeho ugiye kuyihitamo */
+        .selected-now {
+            background-color: #007bff !important;
+            transform: scale(1.1);
+            box-shadow: 0 0 10px #007bff;
+        }
+        .btn-confirm { 
+            background: #007bff; 
+            color: white; 
+            padding: 12px 30px; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-weight: bold;
+            font-size: 1rem;
+        }
+        .btn-confirm:disabled { background: #444; cursor: not-allowed; }
+        
+        .instructions {
+            max-width: 900px;
+            margin: 15px auto;
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+        .status {
+            max-width: 900px;
+            margin: 15px auto;
+            padding: 12px;
+            background: #1a1a1a;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .legend {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.9rem; }
+        .box { width: 15px; height: 15px; border-radius: 3px; }
+    </style>
+</head>
+<body>
+
+<div class="top-nav">
+    <a href="home.html" style="color:#38bdf8; text-decoration:none; font-weight:bold;">← Subira inyuma</a>
+</div>
+
+<div class="header">
+    <h2>Hitamo aho uparika (Slot)</h2>
+    <div>
+        <button class="btn-confirm" onclick="confirmSelection()" id="confirmBtn">Emeza Slot</button>
+        <button class="btn-confirm" onclick="leaveParking()" id="leaveBtn" style="background:#dc3545; margin-left:10px;" disabled>Sohoka / Cancel</button>
+    </div>
+</div>
+
+<div class="legend">
+    <div class="legend-item"><div class="box available"></div> Irimo ubusa</div>
+    <div class="legend-item"><div class="box occupied"></div> Yafashwe</div>
+    <div class="legend-item"><div class="box selected-now"></div> Iyo wahisemo</div>
+</div>
+
+<div class="instructions">
+    <strong>Amabwiriza:</strong> Kanda ku gasanduku k'<strong>icyatsi</strong>, hanyuma ukande <strong>Emeza Slot</strong>. Utukura ntiwakandwaho.
+</div>
+
+<p id="selectionStatus" class="status">Nta slot wahisemo.</p>
+
+<div class="slot-grid" id="slotGrid"></div>
+
+<script>
+    // Constants
+    const STORAGE_MY_SLOT = 'selectedCarSlot';
+    const STORAGE_ALL_OCCUPIED = 'allOccupiedSlots';
+
+    const grid = document.getElementById('slotGrid');
+    const statusText = document.getElementById('selectionStatus');
+    const leaveBtn = document.getElementById('leaveBtn');
+    const confirmBtn = document.getElementById('confirmBtn');
+    
+    let currentTempSelection = null;
+
+    // 1. Reba slots zafashwe n'abandi bose
+    function getAllOccupied() {
+        return JSON.parse(localStorage.getItem(STORAGE_ALL_OCCUPIED) || "[]");
+    }
+
+    // 2. Hamagara ama-buttons
+    function renderSlots() {
+        grid.innerHTML = '';
+        const occupiedList = getAllOccupied();
+        const mySlot = localStorage.getItem(STORAGE_MY_SLOT);
+
+        for (let i = 1; i <= 60; i++) {
+            const slotCode = 'A' + i.toString().padStart(3, '0');
+            const btn = document.createElement('button');
+            btn.classList.add('slot');
+            btn.innerText = slotCode;
+            btn.dataset.slot = slotCode;
+
+            // Reba niba yarafashwe
+            if (occupiedList.includes(slotCode)) {
+                if (slotCode === mySlot) {
+                    // Ni iy'uyu muntu uwinjiye
+                    btn.classList.add('selected-now');
+                    btn.onclick = () => alert("Iyi slot ni iyawe usanzwe uyirimo.");
+                } else {
+                    // Ni iy'undi muntu
+                    btn.classList.add('occupied');
+                    btn.disabled = true;
+                }
+            } else {
+                // Irimo ubusa
+                btn.classList.add('available');
+                btn.onclick = () => selectTempSlot(btn);
+            }
+
+            grid.appendChild(btn);
+        }
+    }
+
+    // 3. Guhitamo by'agateganyo (mu gihe utaremeza)
+    function selectTempSlot(btn) {
+        const mySlot = localStorage.getItem(STORAGE_MY_SLOT);
+        if (mySlot) {
+            alert("Usanzwe ufite slot yawe. Banze uyirekure (Cancel) mbanze uhitemo indi.");
+            return;
+        }
+
+        // Kuramo amabara yose y'ubururu ku zindi
+        document.querySelectorAll('.available').forEach(s => s.classList.remove('selected-now'));
+        
+        btn.classList.add('selected-now');
+        currentTempSelection = btn.dataset.slot;
+        statusText.innerText = "Wahisemo: " + currentTempSelection + " - Kanda Emeza";
+        statusText.style.color = "#38bdf8";
+    }
+
+    // 4. Kwemeza slot (Confirm)
+    function confirmSelection() {
+        if (!currentTempSelection) {
+            alert("Hitamo slot mbanze!");
+            return;
+        }
+
+        // Bika muri database rusange
+        let occupiedList = getAllOccupied();
+        occupiedList.push(currentTempSelection);
+        localStorage.setItem(STORAGE_ALL_OCCUPIED, JSON.stringify(occupiedList));
+
+        // Bika ku muntu
+        localStorage.setItem(STORAGE_MY_SLOT, currentTempSelection);
+
+        statusText.innerText = "✅ Slot " + currentTempSelection + " yemejwe neza!";
+        statusText.style.color = "#28a745";
+        
+        setTimeout(() => {
+            window.location.href = 'payment.html';
+        }, 1000);
+    }
+
+    // 5. Kurekura slot (Leave/Cancel)
+    function leaveParking() {
+        const mySlot = localStorage.getItem(STORAGE_MY_SLOT);
+        if (!mySlot) return;
+
+        if (confirm("Urareka iyi slot yawe " + mySlot + " ?")) {
+            // Kuramo muri database rusange
+            let occupiedList = getAllOccupied();
+            occupiedList = occupiedList.filter(item => item !== mySlot);
+            localStorage.setItem(STORAGE_ALL_OCCUPIED, JSON.stringify(occupiedList));
+
+            // Kuramo ku muntu
+            localStorage.removeItem(STORAGE_MY_SLOT);
+            
+            location.reload(); // Refresh page
+        }
+    }
+
+    // Gutangira
+    window.onload = () => {
+        renderSlots();
+        const mySlot = localStorage.getItem(STORAGE_MY_SLOT);
+        if (mySlot) {
+            statusText.innerText = "Uparitse kuri: " + mySlot;
+            leaveBtn.disabled = false;
+            confirmBtn.disabled = true;
+        }
+    };
+</script>
+
+</body>
+</html>
